@@ -16,7 +16,7 @@ public class ConsumerApp
 	{
 		m.addAttribute("name", "Consumer");
 		m.addAttribute("title", "Title");
-		m.addAttribute("msg", "Msg");
+		m.addAttribute("msg", "Msg2");
 		return "index";
 	}
 
