@@ -1,6 +1,6 @@
 package com.consumer;
 
-import org.springframework.boot.Banner;
+import org.springframework.ui.Model;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
@@ -12,8 +12,11 @@ public class ConsumerApp
 {
 
 	@GetMapping("/")
-	public String index(final Banner.Mode m )
+	public String index(final Model m )
 	{
+		m.addAttribute("name", "Consumer");
+		m.addAttribute("title", "Title");
+		m.addAttribute("msg", "Msg");
 		return "index";
 	}
 
