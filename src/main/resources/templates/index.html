@@ -17,7 +17,43 @@
     Javascript and reload this page!</h2></noscript>
 
 <br>
+<script type="text/javascript">
+    var myStompClient = null;
+    function my_Connect()
+    {
+        var socket = new SockJS('/kafka-websocket');
+        myStompClient = Stomp.over( socket );
+        myStompClient.connect({}, function( frame )
+        {
+            my_SetConnected( true );
+            console.log( 'Connected: ' + frame );
+            myStompClient.subscribe( '/topick/kafka-messages', function( greeting )
+            {
+                my_ShowGreeting( JSON.parse( greeting.body ).content );
+            });
+        });
+    }
+    function my_Disconnect()
+    {
+        if ( myStompClient !== null )
+            myStompClient.disconnect();
+        my_SetConnected( false );
+        console.log( 'Disconnected' );
+    }
+    function my_SendMsg()
+    {
+        myStompClient.send("/app/hello", {}, JSON.stringify({'name': 'test' }));
+    }
+    function my_SetConnected( connected )
+    {
 
+    }
+    function my_ShowGreeting( greeting )
+    {
+
+    }
+    my_Connect();
+</script>
 <label for="connect">WebSocket connection:</label>
 <button id="connect" class="btn btn-default" type="submit">Connect</button>
 <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
