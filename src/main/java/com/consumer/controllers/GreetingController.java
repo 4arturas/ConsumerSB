@@ -5,7 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.util.HtmlUtils;
 
 @Controller
-public class GreetingController {
+public class GreetingController
+{
 
 
     @MessageMapping("/hello")
