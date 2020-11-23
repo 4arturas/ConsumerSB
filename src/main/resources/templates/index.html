@@ -1,86 +1,67 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title>Hello WebSocket</title>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
-    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-    <script src="/js/stomp.min.js"></script>
-    <script src="/js/app.js"></script>
+    <title>Title</title>
 </head>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="/js/stomp.min.js"></script>
 <body>
-<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
-    enabled. Please enable
-    Javascript and reload this page!</h2></noscript>
-
-<br>
+<h1>Consumer</h1>
+<div id="msgDiv"></div>
 <script type="text/javascript">
-    var myStompClient = null;
-    function my_Connect()
+    var stompClient;
+    function ws_Connect()
     {
-        var socket = new SockJS('/kafka-websocket');
-        myStompClient = Stomp.over( socket );
-        myStompClient.connect({}, function( frame )
-        {
-            my_SetConnected( true );
-            console.log( 'Connected: ' + frame );
-            myStompClient.subscribe( '/topick/kafka-messages', function( greeting )
-            {
-                my_ShowGreeting( JSON.parse( greeting.body ).content );
+        if (!stompClient) {
+            const socket = new SockJS("/notifications");
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function () {
+
+                stompClient.subscribe('/user/notification/item', function (response) {
+                    console.log('Got ' + response);
+                    ws_PringMsgFromBackend( JSON.parse(response.body).text );
+                });
+
+                console.info('connected!')
             });
-        });
+        }
     }
-    function my_Disconnect()
-    {
-        if ( myStompClient !== null )
-            myStompClient.disconnect();
-        my_SetConnected( false );
-        console.log( 'Disconnected' );
-    }
-    function my_SendMsg()
-    {
-        myStompClient.send("/app/hello", {}, JSON.stringify({'name': 'test' }));
-    }
-    function my_SetConnected( connected )
-    {
 
-    }
-    function my_ShowGreeting( greeting )
+    function ws_Disconnect()
     {
-
+        if (stompClient) {
+            stompClient.disconnect();
+            stompClient = null;
+            console.info("disconnected :-/");
+        }
     }
-    my_Connect();
+
+    function ws_Start()
+    {
+        if (stompClient) {
+            stompClient.send("/swns/start", {});
+        }
+    }
+
+    function ws_Stop()
+    {
+        if (stompClient) {
+            stompClient.send("/swns/stop", {});
+        }
+    }
+    function ws_PringMsgFromBackend( msg )
+    {
+        var msgDiv = document.getElementById('msgDiv');
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        msgDiv.appendChild( div );
+    }
+    ws_Connect();
+    setTimeout( function () {
+        ws_Start();
+    }, 2000 );
 </script>
-<label for="connect">WebSocket connection:</label>
-<button id="connect" class="btn btn-default" type="submit">Connect</button>
-<button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
-</button>
-
-<br>
-<br>
-<br>
-
-<label for="name">What is your name?</label>
-<input type="text" id="name" class="form-control" placeholder="Your name here...">
-
-<button id="send" class="btn btn-default" type="submit">Send</button>
-
-
-<br>
-<br>
-
-<table id="conversation" class="table table-striped">
-    <thead>
-        <tr>
-            <th>Greetings</th>
-        </tr>
-    </thead>
-    <tbody id="greetings">
-    </tbody>
-</table>
 
 </body>
 </html>
