@@ -1,4 +1,4 @@
-package com.consumer;
+package com.isignthis.consumer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
