@@ -6,22 +6,26 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class NotificationsController {
+public class NotificationsController
+{
 
     private final  KafkaConsumerController dispatcher;
 
     @Autowired
-    public NotificationsController( KafkaConsumerController dispatcher) {
+    public NotificationsController( KafkaConsumerController dispatcher)
+    {
         this.dispatcher = dispatcher;
     }
 
     @MessageMapping("/start")
-    public void start(StompHeaderAccessor stompHeaderAccessor) {
+    public void start(StompHeaderAccessor stompHeaderAccessor)
+    {
         dispatcher.add(stompHeaderAccessor.getSessionId());
     }
 
     @MessageMapping("/stop")
-    public void stop(StompHeaderAccessor stompHeaderAccessor) {
+    public void stop(StompHeaderAccessor stompHeaderAccessor)
+    {
         dispatcher.remove(stompHeaderAccessor.getSessionId());
     }
 }
