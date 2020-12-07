@@ -60,7 +60,7 @@ public class KafkaConsumerController
     {
         final String msg = String.format("Received Message: %s from partition: %s", message, partition );
         dispatch( msg );
-        log.info(  msg );
+        log.info(  "Consumer received message from Kafka - " + message );
     }
 
 }
