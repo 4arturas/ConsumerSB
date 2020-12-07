@@ -8,7 +8,7 @@
 </head>
 
 <body>
-<h1>Consumer v.1.0.0</h1>
+<h1>Consumer v.1.0.0</h1>&nbsp;<button id="buttonClearMesssages" onclick="clear_Messages();">Delete messages</button>
 <div id="msgDiv"></div>
 <script type="text/javascript">
     var stompClient;
@@ -62,6 +62,13 @@
     setTimeout( function () {
         ws_Start();
     }, 2000 );
+
+    function clear_Messages()
+    {
+        var divMsg = document.createElement('div');
+        while ( divMsg.firstChild )
+            divMsg.removeChild( divMsg.firstChild );
+    }
 </script>
 
 </body>
