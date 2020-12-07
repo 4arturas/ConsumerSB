@@ -58,7 +58,8 @@ public class KafkaConsumerController
     @KafkaListener( topics = "example-topic" )
     public void listenWithHeaders(@Payload String message, @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition )
     {
-        final String msg = String.format("Received Message: %s from partition: %s", message, partition );
+//        final String msg = String.format("Received Message: %s from partition: %s", message, partition );
+        final String msg = message;
         dispatch( msg );
         log.info(  "Consumer received message from Kafka - " + message );
     }
