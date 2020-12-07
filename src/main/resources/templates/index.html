@@ -8,7 +8,8 @@
 </head>
 
 <body>
-<h1>Consumer v.1.0.0</h1>&nbsp;<button id="buttonClearMesssages" onclick="clear_Messages();">Delete messages</button>
+<h1>Consumer v.1.0.0</h1>
+<button id="buttonClearMesssages" onclick="clear_Messages();">Clear messages</button>
 <div id="msgDiv"></div>
 <script type="text/javascript">
     var stompClient;
@@ -51,11 +52,12 @@
             stompClient.send("/swns/stop", {});
         }
     }
+    var g_nMsgNr = 1;
     function ws_PringMsgFromBackend( msg )
     {
         var msgDiv = document.getElementById('msgDiv');
         var div = document.createElement('div');
-        div.innerHTML = msg;
+        div.innerHTML = '#' + (g_nMsgNr++) + ' - <b>' + msg + '</b>';
         msgDiv.appendChild( div );
     }
     ws_Connect();
@@ -65,9 +67,9 @@
 
     function clear_Messages()
     {
-        var divMsg = document.createElement('div');
-        while ( divMsg.firstChild )
-            divMsg.removeChild( divMsg.firstChild );
+        var msgDiv = document.getElementById('msgDiv');
+        while ( msgDiv.firstChild )
+            msgDiv.removeChild( msgDiv.firstChild );
     }
 </script>
 
